@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "PhucTND_1",
-    "slug": "PhucTND_1",
+    "name": "PhucTND",
+    "slug": "PhucTND",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
