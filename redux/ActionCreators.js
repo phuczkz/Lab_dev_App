@@ -79,6 +79,7 @@ export const addComment = (comment) => ({
 
 export const postComment = (dishId, rating, author, comment) => (dispatch) => {
   const newComment = {
+    id: Date.now(),
     dishId,
     rating,
     author,
@@ -123,5 +124,9 @@ export const postFavorite = (dishId) => (dispatch) => {
 };
 const addFavorite = (dishId) => ({
   type: ActionTypes.ADD_FAVORITE,
+  payload: dishId,
+});
+export const deleteFavorite = (dishId) => ({
+  type: ActionTypes.DELETE_FAVORITE,
   payload: dishId,
 });

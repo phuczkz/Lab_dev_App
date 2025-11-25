@@ -55,12 +55,13 @@ class RenderDish extends Component {
                   : this.props.onPressFavorite()
               }
             />
+            {/* Phần Assignment 2 */}
             <Icon
               raised
               reverse
               type="font-awesome"
               name="pencil"
-              color="rgba(28, 61, 140, 1)"
+              color="#512DA8" // "rgba(28, 61, 140, 1)"
               onPress={this.props.onPressOpenModal}
             />
           </View>
@@ -76,35 +77,37 @@ class RenderComments extends Component {
     date.setHours(date.getHours() + 7);
     return date.toISOString();
   }
-
-  renderCommentItem(item) {
-    return (
-      <View key={item.id} style={{ margin: 10 }}>
-        <Text style={{ fontSize: 14 }}>{item.comment}</Text>
-
-        <Rating
-          startingValue={item.rating}
-          imageSize={15}
-          readonly
-          style={{ alignItems: "flex-start", paddingVertical: 5 }}
-        />
-
-        <Text style={{ fontSize: 12 }}>
-          {"-- " + item.author + ", " + this.add7Hours(item.date)}
-        </Text>
-      </View>
-    );
-  }
-
   render() {
     const comments = this.props.comments;
-
     return (
       <Card>
-        <Card.Title>Comments</Card.Title>
+        <Card.Title style={{ fontSize: 18 }}>Comments</Card.Title>
         <Card.Divider />
-        {comments.map((item) => this.renderCommentItem(item))}
+        <FlatList
+          data={comments}
+          renderItem={({ item, index }) => this.renderCommentItem(item, index)}
+          keyExtractor={(item, index) => item.id.toString()}
+          // keyExtractor={(item, index) => `comment-${item.id}-${index}`}
+        />
       </Card>
+    );
+  }
+  renderCommentItem(item, index) {
+    return (
+      <View style={{ margin: 12 }}>
+        {/* bỏ key={index} */}
+        <Text style={{ fontSize: 14, marginBottom: 10 }}>{item.comment}</Text>
+        {/* Phần Assignment 2 */}
+        <Rating
+          readonly
+          imageSize={12}
+          startingValue={item.rating}
+          style={{ alignItems: "flex-start", marginBottom: 10 }}
+        />
+        <Text style={{ fontSize: 12 }}>
+          {"-- " + item.author + ", " + this.add7Hours(item.date)}{" "}
+        </Text>
+      </View>
     );
   }
 }
@@ -202,7 +205,7 @@ class Dishdetail extends Component {
             <Button
               title="Submit"
               onPress={() => this.handleComment(dishId)}
-              buttonStyle={{ backgroundColor: "rgba(28, 61, 140, 1)" }}
+              buttonStyle={{ backgroundColor: "#512DA8" }} // "rgba(28, 61, 140, 1)"
             />
 
             <View style={{ height: 10 }} />

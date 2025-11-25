@@ -23,6 +23,42 @@ import {
 } from "../redux/ActionCreators";
 import { baseUrl } from "../shared/baseUrl";
 import Reservation from "./ReservationComponent";
+import Favorites from "./FavoriteComponent";
+
+function FavoritesNavigatorScreen() {
+  const FavoritesNavigator = createStackNavigator();
+  return (
+    <FavoritesNavigator.Navigator
+      initialRouteName="Favorites"
+      screenOptions={{
+        headerStyle: { backgroundColor: "rgba(14, 43, 111, 1)" },
+        headerTintColor: "#fff",
+        headerTitleStyle: { color: "#fff" },
+      }}
+    >
+      <FavoritesNavigator.Screen
+        name="Favorites"
+        component={Favorites}
+        options={({ navigation }) => ({
+          headerTitle: "My Favorites",
+          headerLeft: () => (
+            <Icon
+              name="menu"
+              size={36}
+              color="#fff"
+              onPress={() => navigation.toggleDrawer()}
+            />
+          ),
+        })}
+      />
+      <FavoritesNavigator.Screen
+        name="Dishdetail"
+        component={Dishdetail}
+        options={{ headerTitle: "Dish Detail" }}
+      />
+    </FavoritesNavigator.Navigator>
+  );
+}
 
 function ReservationNavigatorScreen() {
   const ReservationNavigator = createStackNavigator();
@@ -301,6 +337,22 @@ function MainNavigatorScreen() {
           drawerIcon: ({ focused, size }) => (
             <Icon
               name="cutlery"
+              type="font-awesome"
+              size={size}
+              color={focused ? "rgba(14, 43, 111, 1)" : "#ccc"}
+            />
+          ),
+        }}
+      />
+      <MainNavigator.Screen
+        name="FavoritesScreen"
+        component={FavoritesNavigatorScreen}
+        options={{
+          title: "My Favorites",
+          headerShown: false,
+          drawerIcon: ({ focused, size }) => (
+            <Icon
+              name="heart"
               type="font-awesome"
               size={size}
               color={focused ? "rgba(14, 43, 111, 1)" : "#ccc"}
