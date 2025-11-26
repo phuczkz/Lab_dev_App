@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, FlatList, Modal } from "react-native";
+import { View, Text, FlatList, Modal, PanResponder, Alert } from "react-native";
 import {
   Card,
   Image,
@@ -14,9 +14,40 @@ import { ScrollView } from "react-native-virtualized-view";
 import { baseUrl } from "../shared/baseUrl";
 import { connect } from "react-redux";
 import { postFavorite, postComment } from "../redux/ActionCreators";
+import * as Animatable from "react-native-animatable";
 
 class RenderDish extends Component {
   render() {
+    // gesture
+    const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
+      if (dx < -200) return 1; //right to left
+      return 0;
+    };
+    const panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: (e, gestureState) => {
+        return true;
+      },
+      onPanResponderEnd: (e, gestureState) => {
+        if (recognizeDrag(gestureState) === 1) {
+          Alert.alert(
+            "Add Favorite",
+            "Are you sure you wish to add" + dish.name + " to favorite?",
+            [
+              { text: "Cancel", onPress: () => {} },
+              {
+                text: "OK",
+                onPress: () => {
+                  this.props.favorite
+                    ? alert("Already favorite")
+                    : this.props.onPressFavorite();
+                },
+              },
+            ]
+          );
+        }
+        return true;
+      },
+    });
     const dish = this.props.dish;
     if (dish != null) {
       return (
@@ -166,13 +197,18 @@ class Dishdetail extends Component {
     return (
       <View style={{ flex: 1 }}>
         <ScrollView>
-          <RenderDish
-            dish={dish}
-            favorite={favorites}
-            onPressFavorite={() => this.markFavorite(dishId)}
-            onPressOpenModal={() => this.setState({ showModal: true })}
-          />
-          <RenderComments comments={comments} />
+          <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+            <RenderDish
+              dish={dish}
+              favorite={favorites}
+              onPressFavorite={() => this.markFavorite(dishId)}
+              onPressOpenModal={() => this.setState({ showModal: true })}
+            />
+          </Animatable.View>
+
+          <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
+            <RenderComments comments={comments} />
+          </Animatable.View>
         </ScrollView>
         {/* Phần Assignment 2 - Modal */}
         <Modal

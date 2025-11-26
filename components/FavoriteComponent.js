@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { FlatList, Text, View, TouchableOpacity } from "react-native";
+import { FlatList, Text, View, TouchableOpacity, Alert } from "react-native";
 import { ListItem, Avatar } from "react-native-elements";
 import Loading from "./LoadingComponent";
 import { baseUrl } from "../shared/baseUrl";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { deleteFavorite } from "../redux/ActionCreators";
 import { connect } from "react-redux";
+import * as Animatable from "react-native-animatable";
 
 const mapDispatchToProps = (dispatch) => ({
   deleteFavorite: (dishId) => dispatch(deleteFavorite(dishId)),
@@ -35,15 +36,17 @@ class Favorites extends Component {
         //   renderItem={({ item, index }) => this.renderMenuItem(item, index)}
         //   keyExtractor={(item) => item.id.toString()}
         // />
-        <SwipeListView
-          data={dishes}
-          renderItem={({ item, index }) => this.renderMenuItem(item, index)}
-          renderHiddenItem={({ item, index }) =>
-            this.renderHiddenItem(item, index)
-          }
-          keyExtractor={(item) => item.id.toString()}
-          rightOpenValue={-100}
-        />
+        <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+          <SwipeListView
+            data={dishes}
+            renderItem={({ item, index }) => this.renderMenuItem(item, index)}
+            renderHiddenItem={({ item, index }) =>
+              this.renderHiddenItem(item, index)
+            }
+            keyExtractor={(item) => item.id.toString()}
+            rightOpenValue={-100}
+          />
+        </Animatable.View>
       );
     }
   }
@@ -92,7 +95,22 @@ class Favorites extends Component {
             width: 100,
             backgroundColor: "red",
           }}
-          onPress={() => this.props.deleteFavorite(item.id)}
+          // onPress={() => this.props.deleteFavorite(item.id)}
+          onPress={() => {
+            Alert.alert(
+              "Delete Favorite?",
+              "Are you sure you wish to delete the favorite dish " +
+                item.name +
+                "?",
+              [
+                { text: "Cancel", onPress: () => {} },
+                {
+                  text: "OK",
+                  onPress: () => this.props.deleteFavorite(item.id),
+                },
+              ]
+            );
+          }}
         >
           <Text style={{ color: "#FFF" }}>Delete</Text>
         </TouchableOpacity>

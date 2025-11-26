@@ -78,7 +78,7 @@ export const addComment = (comment) => ({
 });
 
 export const postComment = (dishId, rating, author, comment) => (dispatch) => {
-  const newComment = {
+  const newcmt = {
     id: Date.now(),
     dishId,
     rating,
@@ -86,11 +86,20 @@ export const postComment = (dishId, rating, author, comment) => (dispatch) => {
     comment,
     date: new Date().toISOString(),
   };
-
-  // Delay 1 giây theo yêu cầu Task 2
-  setTimeout(() => {
-    dispatch(addComment(newComment));
-  }, 1000);
+  fetch(baseUrl + "comments", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newcmt),
+  })
+    .then((response) => {
+      if (!response.ok)
+        throw Error("Error " + response.status + ": " + response.statusText);
+      else return response.json();
+    })
+    .then((response) => dispatch(addComment(response)))
+    .catch((error) => dispatch(commentsFailed(error.message)));
 };
 
 // promotions

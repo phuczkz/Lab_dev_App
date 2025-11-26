@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { View, Text } from "react-native";
 import { Card, Image } from "react-native-elements";
 import { color } from "react-native-elements/dist/helpers";
+import * as Animatable from "react-native-animatable";
 
 class Contact extends Component {
   render() {
     return (
-      <View>
+      <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
         <Card>
           <Card.Title style={{ fontWeight: "bold", fontSize: 16 }}>
             Contact Information
@@ -21,7 +22,7 @@ class Contact extends Component {
             <Text style={styles.contactText}>Email: confusion@food.net</Text>
           </View>
         </Card>
-      </View>
+      </Animatable.View>
     );
   }
 }
