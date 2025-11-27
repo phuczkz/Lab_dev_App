@@ -355,7 +355,7 @@ function MainNavigatorScreen() {
               name="heart"
               type="font-awesome"
               size={size}
-              color={focused ? "rgba(14, 43, 111, 1)" : "#ccc"}
+              color={focused ? "rgba(250, 61, 64, 1)" : "#ccc"}
             />
           ),
         }}
