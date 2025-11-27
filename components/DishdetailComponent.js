@@ -21,10 +21,6 @@ import { baseUrl } from "../shared/baseUrl";
 import { postFavorite, postComment } from "../redux/ActionCreators";
 import * as Animatable from "react-native-animatable";
 
-/* -------------------------------------------------------------------------- */
-/*                              Render Dish Component                          */
-/* -------------------------------------------------------------------------- */
-
 class RenderDish extends Component {
   render() {
     const dish = this.props.dish;
@@ -65,7 +61,7 @@ class RenderDish extends Component {
       <Card {...panResponder.panHandlers}>
         <Image
           source={{ uri: baseUrl + dish.image }}
-          style={{ width: "100%", height: 200 }}
+          style={{ width: "100%", height: 150 }}
         >
           <View style={styles.imageTitleContainer}>
             <Card.FeaturedTitle style={styles.featuredTitle}>
@@ -94,7 +90,7 @@ class RenderDish extends Component {
             raised
             reverse
             type="font-awesome"
-            color="#7cc"
+            color="rgba(14, 43, 111, 1)"
             name="pencil"
             onPress={this.props.onPressComment}
           />
@@ -104,11 +100,13 @@ class RenderDish extends Component {
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/*                             Render Comments Component                       */
-/* -------------------------------------------------------------------------- */
-
 class RenderComments extends Component {
+  add7Hours(dateString) {
+    const date = new Date(dateString);
+    date.setHours(date.getHours() + 7);
+    return date.toISOString();
+  }
+
   renderCommentItem(item) {
     return (
       <View key={item.id} style={{ margin: 10 }}>
@@ -121,8 +119,8 @@ class RenderComments extends Component {
           style={{ alignItems: "flex-start", paddingVertical: 5 }}
         />
 
-        <Text style={{ fontSize: 12, color: "#666" }}>
-          {"-- " + item.author + ", " + item.date}
+        <Text style={{ fontSize: 12 }}>
+          {"-- " + item.author + ", " + this.add7Hours(item.date)}
         </Text>
       </View>
     );
@@ -141,10 +139,6 @@ class RenderComments extends Component {
     );
   }
 }
-
-/* -------------------------------------------------------------------------- */
-/*                              Dish Detail Component                          */
-/* -------------------------------------------------------------------------- */
 
 class Dishdetail extends Component {
   constructor(props) {
@@ -267,10 +261,6 @@ class Dishdetail extends Component {
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                    Styles                                   */
-/* -------------------------------------------------------------------------- */
-
 const styles = StyleSheet.create({
   imageTitleContainer: {
     flex: 1,
@@ -329,10 +319,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-/* -------------------------------------------------------------------------- */
-/*                                  Redux Connect                               */
-/* -------------------------------------------------------------------------- */
 
 const mapStateToProps = (state) => ({
   dishes: state.dishes,
