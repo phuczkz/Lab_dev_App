@@ -30,6 +30,11 @@ class RenderDish extends Component {
       if (dx < -200) return 1;
       return 0;
     };
+    //  Gesture swipe left → right
+    const recognizeComment = ({ dx }) => {
+      if (dx > 200) return 1;
+      return 0;
+    };
 
     const panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -50,6 +55,9 @@ class RenderDish extends Component {
               },
             ]
           );
+        }
+        if (recognizeComment(gestureState) === 1) {
+          this.props.onPressComment();
         }
         return true;
       },
