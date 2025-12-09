@@ -15,7 +15,7 @@ import { Picker } from "@react-native-picker/picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import * as Animatable from "react-native-animatable";
-import { ZoomIn } from "react-native-reanimated";
+import * as Notifications from "expo-notifications";
 
 class ModalContent extends Component {
   render() {
@@ -77,12 +77,36 @@ class Reservation extends Component {
         },
         {
           text: "OK",
-          onPress: () => this.resetForm(),
+          onPress: () => {
+            this.presentLocalNotification(this.state.date);
+            this.resetForm();
+          },
           style: "default",
         },
       ],
       { cancelable: false }
     );
+  }
+  async presentLocalNotification(date) {
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status === "granted") {
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowBanner: true,
+          shouldPlaySound: true,
+          shouldSetBadge: true,
+        }),
+      });
+      Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Your Reservation",
+          body: "Reservation for " + date + " requested",
+          sound: true,
+          vibrate: true,
+        },
+        trigger: null,
+      });
+    }
   }
 
   render() {
